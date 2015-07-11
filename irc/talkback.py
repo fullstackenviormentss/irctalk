@@ -23,10 +23,10 @@ class Talkback(object):
     def parse_message(self, message, stream):
         channel, contents = message.message.split(" ", 1)
         if not channel.startswith("#"):
-            username = message.ident[1:].split("!")[0]
-            logging.info("Not a channel ({0}) -- using {1}".format(
-                channel, username))
-            channel = username
+                username = message.ident[1:].split("!")[0]
+                logging.info("Not a channel ({0}) -- using {1}".format(
+                    channel, username))
+                channel = username
 
         contents = contents.lower()
 
@@ -49,14 +49,15 @@ class Talkback(object):
         return attribute(config, channel, matches, stream)
 
     def run_announce_command(self, config, channel, matches, stream):
-        args = [m for m in matches if m and not m.startswith("#")]
-        channels = [m for m in matches if m and m.startswith("#")]
+        prefixes = ["!", "#"]
+        args = [m for m in matches if m and m[0] not in prefixes]
+        channels = [m for m in matches if m and m[0] in prefixes]
         if len(channels) > 1:
             logging.info("Too many channels: {0}".format(matches))
             self.send(stream, channel, "Please provide a single #channel.")
             return
         elif len(channels) == 1:
-            channel = channels[0]
+            channel = channels[0].replace("!", "")
         else:
             logging.info("No channel provided, using: {0}".format(channel))
         announce_config = config["announce_config"]
