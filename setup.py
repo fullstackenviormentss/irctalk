@@ -21,6 +21,8 @@ setup(
         "tornado", "PyYAML"
     ],
     entry_points={
-        "console_scripts": ["irctalk = irc.service:main"],
-        "console_scripts": ["slacktalk = irc.slack_service:main"],
+        "console_scripts": [
+            "irctalk = irc.service:main",
+            "slacktalk = irc.slack_service:main"
+        ]
     })
